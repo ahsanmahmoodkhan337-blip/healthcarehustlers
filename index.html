@@ -588,13 +588,13 @@
                 </svg>
             </div>
             <h3 class="text-2xl font-bold text-[#1e293b] mb-3">Request Submitted! ✅</h3>
-            <p class="text-[#334155] mb-2">Your request is pending approval.</p>
-            <p class="text-[#334155] text-sm mb-6">We'll review your payment details and notify you shortly. Once approved, you'll receive a unique link to access your ebook.</p>
+            <p class="text-[#334155] mb-2">Thank you! Your payment details have been received.</p>
+            <p class="text-[#334155] text-sm mb-6">You'll receive an email with a link to access your ebook within 24 hours after approval. We'll notify you once your payment is confirmed.</p>
             <div class="bg-[#F0F5FA] rounded-xl p-4 text-sm text-[#334155] mb-6">
-                <p class="font-medium text-[#1e293b]">📧 Email notifications coming soon</p>
-                <p class="text-xs mt-1">For now, please check back at the admin panel or contact us directly.</p>
+                <p class="font-medium text-[#1e293b]">📧 Check your email</p>
+                <p class="text-xs mt-1">The download link will be sent to the email you provided.</p>
             </div>
-            <button onclick="closeModal()" class="bg-[#046bd2] hover:bg-[#045cb4] text-white font-semibold px-8 py-3 rounded-xl btn-hover">
+            <button onclick="closeModalAndReset()" class="bg-[#046bd2] hover:bg-[#045cb4] text-white font-semibold px-8 py-3 rounded-xl btn-hover">
                 Got it
             </button>
         </div>
@@ -615,6 +615,9 @@
         });
 
         function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+        function closeModalAndReset() {
             document.getElementById('successModal').classList.add('hidden');
         }
 
@@ -659,8 +662,10 @@
                 btnSpinner.classList.add('hidden');
                 btn.classList.remove('opacity-80');
 
-                // Show success modal
+                // Hide the form, show success
+                document.getElementById('verify-form').classList.add('hidden');
                 document.getElementById('successModal').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             })
             .catch(err => {
                 btn.disabled = false;

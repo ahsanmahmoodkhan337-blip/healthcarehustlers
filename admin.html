@@ -132,6 +132,22 @@
                 </button>
             </div>
 
+            <!-- Add New Student ID -->
+            <div class="bg-white rounded-xl p-4 border border-gray-100 mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                <div class="flex-1 w-full">
+                    <label class="text-sm font-medium text-[#1e293b] block mb-1">Add New Student ID</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="newStudentId" placeholder="e.g. HH-006"
+                               class="flex-1 px-4 py-2 rounded-xl border border-gray-200 focus:border-[#046bd2] focus:ring-2 focus:ring-[#046bd2]/20 outline-none transition-all text-sm" />
+                        <button onclick="addStudentId()" class="bg-[#046bd2] hover:bg-[#045cb4] text-white font-semibold px-5 py-2 rounded-xl text-sm btn-hover whitespace-nowrap">
+                            + Add ID
+                        </button>
+                    </div>
+                    <p id="addStudentMsg" class="text-xs mt-1 hidden"></p>
+                </div>
+            </div>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -417,6 +433,39 @@
             })
             .then(res => res.json())
             .then(() => renderStudentIds());
+        }
+
+        function addStudentId() {
+            const input = document.getElementById('newStudentId');
+            const msg = document.getElementById('addStudentMsg');
+            const id = input.value.trim().toUpperCase();
+
+            if (!id) {
+                msg.textContent = 'Please enter a Student ID';
+                msg.className = 'text-xs mt-1 text-red-500';
+                msg.classList.remove('hidden');
+                return;
+            }
+
+            fetch(`${API_BASE}/api/add-student-id`, {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ student_id: id })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    msg.textContent = data.error;
+                    msg.className = 'text-xs mt-1 text-red-500';
+                } else {
+                    msg.textContent = `✅ ${data.message}`;
+                    msg.className = 'text-xs mt-1 text-emerald-600';
+                    input.value = '';
+                    renderStudentIds();
+                }
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3000);
+            });
         }
     </script>
 
